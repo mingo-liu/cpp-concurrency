@@ -22,12 +22,12 @@ double concurrent_task(int min, int max) {
   unsigned concurrent_count = thread::hardware_concurrency();
   min = 0;
   for (int i = 0; i < concurrent_count; i++) {
-    packaged_task<double(int, int)> task(concurrent_worker);
-    results.push_back(task.get_future());
+    packaged_task<double(int, int)> task(concurrent_worker);  // 将packaged_task 绑定到一个函数上
+    results.push_back(task.get_future());     // 通过与之关联的future来获取任务的结果
 
     int range = max / concurrent_count * (i + 1);
     thread t(std::move(task), min, range);
-    t.detach();
+    t.detach();     // 独立的执行线程t
 
     min = range + 1;
   }
@@ -35,7 +35,7 @@ double concurrent_task(int min, int max) {
   cout << "threads create finish" << endl;
   double sum = 0;
   for (auto& r : results) {
-    sum += r.get();
+    sum += r.get();           //  累加各个任务返回的结果；之前是通过声明一个static的全局变量sum，然后每个任务计算完结果后，直接将其加到sum上
   }
   return sum;
 }

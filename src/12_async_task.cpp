@@ -37,7 +37,7 @@ private:
 
 int main() {
   sum = 0;
-  auto f1 = async(worker, 0, MAX);
+  auto f1 = async(worker, 0, MAX);  // 异步执行并返回结果
   cout << "Async task triggered" << endl;
   f1.wait();
   cout << "Async task finish, result: " << sum << endl << endl;

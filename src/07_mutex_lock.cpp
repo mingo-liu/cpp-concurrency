@@ -10,11 +10,11 @@ using namespace std;
 static const int MAX = 10e8;
 static double sum = 0;
 
-static mutex exclusive;
+static mutex exclusive;   // 定义互斥锁
 
 void concurrent_worker(int min, int max) {
   for (int i = min; i <= max; i++) {
-    exclusive.lock();
+    exclusive.lock();   // 给临界区加锁
     sum += sqrt(i);
     exclusive.unlock();
   }
@@ -30,7 +30,7 @@ void concurrent_task(int min, int max) {
   sum = 0;
   for (int t = 0; t < concurrent_count; t++) {
     int range = max / concurrent_count * (t + 1);
-    threads.push_back(thread(concurrent_worker, min, range));
+    threads.push_back(thread(concurrent_worker, min, range));   // 创建并发线程
     min = range + 1;
   }
   for (int i = 0; i < threads.size(); i++) {

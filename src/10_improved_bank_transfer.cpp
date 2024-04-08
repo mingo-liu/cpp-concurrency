@@ -40,7 +40,7 @@ public:
     // lock_guard lockA(*accountA->getLock(), adopt_lock);
     // lock_guard lockB(*accountB->getLock(), adopt_lock);
 
-    scoped_lock lockAll(*accountA->getLock(), *accountB->getLock());
+    scoped_lock lockAll(*accountA->getLock(), *accountB->getLock());  // c++17;用于多个互斥体的免死锁 RAII 封装器
 
     if (amount > accountA->getMoney()) {
       return false;
@@ -63,12 +63,12 @@ private:
   set<Account*> mAccounts;
 };
 
-mutex sCoutLock;
+mutex sCoutLock;  
 void randomTransfer(Bank* bank, Account* accountA, Account* accountB) {
   while(true) {
     double randomMoney = ((double)rand() / RAND_MAX) * 100;
     if (bank->transferMoney(accountA, accountB, randomMoney)) {
-      sCoutLock.lock();
+      sCoutLock.lock(); // 输出时加锁，输出完毕时解锁，防止输出混乱
       cout << "Transfer " << randomMoney << " from " << accountA->getName()
           << " to " << accountB->getName()
           << ", Bank totalMoney: " << bank->totalMoney() << endl;

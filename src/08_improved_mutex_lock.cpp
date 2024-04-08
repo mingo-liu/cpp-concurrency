@@ -18,7 +18,7 @@ void concurrent_worker(int min, int max) {
     tmp_sum += sqrt(i);
   }
   exclusive.lock();
-  sum += tmp_sum;
+  sum += tmp_sum;   // 只在汇总时进行一次锁保护
   exclusive.unlock();
 }
 

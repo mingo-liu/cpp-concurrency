@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.8)
 project(cpp-concurrency)
 
-set(CMAKE_CXX_COMPILER "g++-9")
+set(CMAKE_CXX_COMPILER "g++-11")
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 

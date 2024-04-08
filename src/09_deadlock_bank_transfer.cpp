@@ -35,15 +35,15 @@ public:
     mAccounts.insert(account);
   }
 
-  bool transferMoney(Account* accountA, Account* accountB, double amount) {
-    lock_guard guardA(*accountA->getLock());
-    lock_guard guardB(*accountB->getLock());
+  bool transferMoney(Account* accountA, Account* accountB, double amount) { // accountA ---> accountB
+    lock_guard<mutex> guardA(*accountA->getLock());  // 1.修改银行账户钱获得锁; 多个线程操作同一对象，使用同一把锁
+    lock_guard guardB(*accountB->getLock());  // 编译器可以推断出lock_guard的模板参数类型：lock_guard<std::mutex>
 
-    if (amount > accountA->getMoney()) {
+    if (amount > accountA->getMoney()) {  // 2.判断钱是否足够
       return false;
     }
 
-    accountA->changeMoney(-amount);
+    accountA->changeMoney(-amount);   // 3.进行转账
     accountB->changeMoney(amount);
     return true;
   }
